@@ -1,5 +1,6 @@
 require "paper_trail_globalid/paper_trail"
 require "paper_trail_globalid/version"
+require "paper_trail_globalid/rails/controller"
 
 module PaperTrailGlobalid
   module ::PaperTrail
@@ -7,7 +8,6 @@ module PaperTrailGlobalid
       prepend ::PaperTrailGlobalid::PaperTrail
     end
   end
-
   module ::PaperTrail
     module Request
       class << self
@@ -19,6 +19,18 @@ module PaperTrailGlobalid
   module ::PaperTrail
     module VersionConcern
       include ::PaperTrailGlobalid::PaperTrail
+    end
+  end
+
+  module ::PaperTrail
+    module Rails
+      module Controller
+        if defined?(::ActionController)
+          ::ActiveSupport.on_load(:action_controller) do
+            include PaperTrailGlobalid::Rails::Controller
+          end
+        end
+      end
     end
   end
 end
